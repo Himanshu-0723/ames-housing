@@ -17,6 +17,17 @@ The project emphasizes understanding the meaning of each feature and making prep
 
 ---
 
+## Technologies Used
+
+* Python
+* Pandas
+* NumPy
+* Matplotlib
+* Seaborn
+* Scikit-Learn
+
+---
+
 ## Dataset
 
 The dataset contains residential property information from Ames, Iowa and includes:
@@ -249,37 +260,131 @@ Reason:
 
 ---
 
-## Model
+## Model Training & Evaluation
 
-### Linear Regression
+Three regression models were trained and evaluated using the same preprocessing pipeline.
 
-A baseline Linear Regression model was trained after preprocessing.
+### 1. Linear Regression
 
-### Results
+Linear Regression was used as a baseline model to evaluate the effectiveness of the preprocessing and feature engineering strategy.
 
 | Metric | Score  |
 | ------ | ------ |
-| R²     | 0.883  |
-| RMSE   | 30,656 |
-| MAE    | 18,079 |
+| R²     | 0.856  |
+| RMSE   | 34,011 |
+| MAE    | 14,835 |
 
-### Interpretation
+#### Observations
 
-The model explains approximately **88.3%** of the variance in house prices while maintaining reasonable prediction error, demonstrating the effectiveness of the preprocessing strategy.
+* Achieved strong predictive performance despite its simplicity.
+* Demonstrated that the preprocessing strategy successfully captured most of the important information in the dataset.
+* Provided an interpretable baseline for comparison with tree-based models.
+
+---
+
+### 2. Decision Tree Regressor
+
+A Decision Tree Regressor was tuned using GridSearchCV.
+
+#### Best Parameters
+
+```python
+{
+    'max_depth': 10,
+    'max_features': None,
+    'min_samples_leaf': 5,
+    'min_samples_split': 20
+}
+```
+
+#### Cross Validation Score
+
+```text
+R² = 0.787
+```
+
+#### Test Performance
+
+| Metric | Score  |
+| ------ | ------ |
+| R²     | 0.841  |
+| RMSE   | 35,660 |
+| MAE    | 22,682 |
+
+#### Observations
+
+* Performance was slightly lower than Linear Regression.
+* Indicates that the dataset contains strong linear and additive relationships.
+* Tree-based splits alone were insufficient to outperform the linear baseline.
 
 ---
 
-## Technologies Used
+### 3. Random Forest Regressor
 
-* Python
-* Pandas
-* NumPy
-* Matplotlib
-* Seaborn
-* Scikit-Learn
+A Random Forest Regressor was trained to capture nonlinear relationships and feature interactions.
 
+| Metric | Score      |
+| ------ | ---------- |
+| R²     | **0.906**  |
+| RMSE   | **27,452** |
+| MAE    | 16,098     |
+
+#### Observations
+
+* Achieved the best overall performance.
+* Improved R² from 0.856 to 0.906.
+* Reduced RMSE by approximately $6,500 compared to Linear Regression.
+* Demonstrated the ability to capture nonlinear relationships within the housing data.
 
 ---
+
+## Model Comparison
+
+| Model             | R²        | RMSE       | MAE    |
+| ----------------- | --------- | ---------- | ------ |
+| Linear Regression | 0.856     | 34,011     | 14,835 |
+| Decision Tree     | 0.841     | 35,660     | 22,682 |
+| Random Forest     | **0.906** | **27,452** | 16,098 |
+
+### Best Performing Model
+
+**Random Forest Regressor** achieved the strongest predictive performance with:
+
+* R² = 0.906
+* RMSE = $27,452
+* MAE = $16,098
+
+The model explains approximately **90.6% of the variance** in house prices while producing the lowest overall prediction error.
+
+---
+
+## Feature Importance (Random Forest)
+
+Random Forest feature importance aligned closely with the findings from Exploratory Data Analysis.
+
+| Feature       | Importance |
+| ------------- | ---------- |
+| Overall Qual  | 58.1%      |
+| Gr Liv Area   | 8.9%       |
+| Garage Area   | 4.0%       |
+| Garage Cars   | 4.0%       |
+| Total Bsmt SF | 3.2%       |
+
+### Key Insight
+
+Overall Quality was by far the most influential feature in predicting house prices, accounting for more than half of the model's total feature importance. Living area, garage characteristics, and basement size were also major contributors.
+
+These findings strongly validate the conclusions drawn during EDA, where Overall Quality showed the strongest relationship with SalePrice.
+
+---
+
+### Final Conclusion
+
+This project demonstrates a complete machine learning workflow, beginning with data understanding and exploratory analysis, followed by preprocessing, feature engineering, model development, and evaluation.
+
+Among the models tested, Random Forest Regressor achieved the best performance with an R² score of **0.906**, confirming that house quality, living area, garage characteristics, and basement size are the most influential factors affecting residential property prices in Ames, Iowa.
+
+
 
 ## Learning Outcomes
 
